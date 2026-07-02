@@ -73,14 +73,126 @@ Prueba conjunta donde el robot se controla por teleoperación mientras el LiDAR 
 
 ```text
 .
-├── docs/              # Esquemas, imágenes y documentación auxiliar
-├── src/               # Código fuente del robot
-├── ros2/              # Configuración ROS 2, launch y RViz
-├── cad/               # Archivos CAD y piezas imprimibles
-├── images/            # Imágenes utilizadas en el README
-├── videos/            # Enlaces a vídeos de validación
+├── docs/                          # Esquemas, imágenes y documentación auxiliar
+├── src/                           # Código fuente del robot
+│   ├── lidar/
+│   │   └── iniciar_lidar_rviz.sh
+│   ├── imu_bno055/
+│   │   └── prueba_bno055_i2c.py
+│   ├── teleoperacion/
+│   │   ├── iniciar_teleop.sh
+│   │   └── teleop.py
+│   └── openrb_dynamixel/
+│       └── teleop_test.ino
+├── ros2/                          # Configuración ROS 2, launch y RViz
+├── cad/                           # Archivos CAD y piezas imprimibles
+├── images/                        # Imágenes utilizadas en el README
+├── videos/                        # Enlaces a vídeos de validación
+├── .gitignore
 ├── README.md
 └── LICENSE
 ```
+
+## Código incluido
+
+El repositorio incluye los principales scripts utilizados durante la validación funcional del robot móvil AMR-BC.
+
+| Archivo | Descripción |
+|---|---|
+| `src/lidar/iniciar_lidar_rviz.sh` | Script de arranque del RPLIDAR C1 y RViz2 dentro del contenedor Docker. |
+| `src/imu_bno055/prueba_bno055_i2c.py` | Script de prueba para validar la comunicación I2C con la IMU BNO055. |
+| `src/teleoperacion/iniciar_teleop.sh` | Script de inicio de la teleoperación desde la Raspberry Pi 5. |
+| `src/teleoperacion/teleop.py` | Programa principal de control por teclado, enviando comandos serie a la OpenRB-150. |
+| `src/openrb_dynamixel/teleop_test.ino` | Código cargado en la OpenRB-150 para controlar los motores DYNAMIXEL XL430. |
+
+## Ejecución básica
+
+### Teleoperación
+
+Para iniciar la teleoperación desde la Raspberry Pi 5:
+
+```bash
+./iniciar_teleop.sh
+```
+
+El script comprueba la conexión de la OpenRB-150 en `/dev/ttyACM0`, arranca el contenedor Docker `tfg_robot_movimiento` y ejecuta el programa `teleop.py`.
+
+Los comandos utilizados son:
+
+| Tecla | Acción |
+|---|---|
+| `W` | Avance |
+| `S` | Retroceso |
+| `A` | Giro a la izquierda |
+| `D` | Giro a la derecha |
+| `X` | Parada |
+
+### LiDAR y RViz2
+
+Para lanzar el sistema de percepción mediante el RPLIDAR C1 y visualizar los datos en RViz2:
+
+```bash
+./iniciar_lidar_rviz.sh
+```
+
+El script arranca el contenedor `tfg_lidar_rviz_arm64`, ejecuta el nodo `sllidar_ros2` y abre RViz2 con la configuración guardada.
+
+Los parámetros utilizados para el LiDAR son:
+
+| Parámetro | Valor |
+|---|---|
+| Puerto serie | `/dev/ttyAMA0` |
+| Baudrate | `460800` |
+| Frame ID | `laser` |
+| Inverted | `false` |
+| Angle compensate | `true` |
+
+La comunicación del RPLIDAR C1 con la Raspberry Pi 5 se realiza mediante UART. La alimentación del LiDAR se proporciona externamente mediante un convertidor DC-DC LM2596 de 12 V a 5 V, por lo que la conexión UART se emplea únicamente para comunicación de datos.
+
+### IMU BNO055
+
+Para comprobar la lectura de la IMU BNO055 mediante I2C:
+
+```bash
+python3 prueba_bno055_i2c.py
+```
+
+El script muestra en tiempo real datos de temperatura, orientación Euler, aceleración, giroscopio y magnetómetro.
+
+La conexión utilizada es:
+
+| Señal IMU BNO055 | Raspberry Pi 5 |
+|---|---|
+| VIN | 3.3 V |
+| GND | GND |
+| SDA | GPIO2 / Pin 3 |
+| SCL | GPIO3 / Pin 5 |
+
+## Estado del proyecto
+
+El sistema ha sido validado a nivel de integración hardware-software, teleoperación, lectura de IMU y visualización de datos LiDAR en RViz2.
+
+Actualmente, el robot permite:
+
+- Control manual mediante teleoperación.
+- Comunicación entre Raspberry Pi 5 y OpenRB-150.
+- Control de motores DYNAMIXEL XL430.
+- Lectura de datos de la IMU BNO055 mediante I2C.
+- Visualización del entorno mediante RPLIDAR C1 en RViz2.
+- Separación entre alimentación de potencia y alimentación de computación.
+
+Como líneas futuras se plantea la integración completa de la IMU en ROS 2, la implementación de navegación autónoma, la caracterización experimental de la autonomía y la mejora de la arquitectura software mediante paquetes ROS 2 específicos.
+
+## Autor
+
+**Diego Luis García Montoya**  
+Grado en Ingeniería Electrónica Industrial y Automática  
+Universidad de Almería
+
+## Licencia
+
+Este proyecto se distribuye bajo licencia MIT. Consulte el archivo `LICENSE` para más información.
+
+
 
 
