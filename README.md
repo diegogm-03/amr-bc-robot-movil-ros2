@@ -6,6 +6,8 @@
 ![Status](https://img.shields.io/badge/Status-Validated-success)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+![Robot AMR-BC](images/robot_portada.png)
+
 ## Descripción
 
 Este repositorio recoge el desarrollo software y parte de la documentación técnica del robot móvil **AMR-BC**, una plataforma robótica modular de bajo coste desarrollada como Trabajo Fin de Grado en Ingeniería Electrónica Industrial y Automática.
