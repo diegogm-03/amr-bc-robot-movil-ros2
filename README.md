@@ -6,6 +6,7 @@
 ![Status](https://img.shields.io/badge/Status-Validated-success)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+![Robot AMR-BC](images/robot_final.jpg)
 
 ## Descripción
 
