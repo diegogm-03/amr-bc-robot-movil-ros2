@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+.venv/
+
+# ROS 2
+build/
+install/
+log/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+
+# Vídeos pesados
+*.mp4
+*.mov
+*.avi
+*.mkv
+
+# Credenciales
+*.key
+*.pem
+*.crt
+secrets.*
+tokens.*
