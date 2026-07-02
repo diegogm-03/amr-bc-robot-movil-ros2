@@ -6,7 +6,7 @@
 ![Status](https://img.shields.io/badge/Status-Validated-success)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-![Robot AMR-BC](images/robot_portada.png)
+![Robot AMR-BC](<img width="1500" height="2000" alt="WhatsApp Image 2026-04-28 at 1 51 05 PM (2)" src="https://github.com/user-attachments/assets/4c1e021a-a2d1-486a-92a7-98c74aac467f" />)
 
 ## Descripción
 
