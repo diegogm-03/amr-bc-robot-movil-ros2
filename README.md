@@ -10,7 +10,7 @@
 
 ## Descripción
 
-Este repositorio recoge el desarrollo software y parte de la documentación técnica del robot móvil **AMR-BC**, una plataforma robótica modular de bajo coste desarrollada como Trabajo Fin de Grado en Ingeniería Electrónica Industrial y Automática.
+Este repositorio recoge el desarrollo software, el diseño mecánico y parte de la documentación técnica del robot móvil **AMR-BC**, una plataforma robótica modular de bajo coste desarrollada como Trabajo Fin de Grado en Ingeniería Electrónica Industrial y Automática.
 
 El proyecto integra diseño mecánico mediante impresión 3D, electrónica de control, sensorización, comunicación hardware-software y validación funcional mediante ROS 2.
 
@@ -27,6 +27,7 @@ La plataforma está basada en una **Raspberry Pi 5**, un controlador **OpenRB-15
 - Visualización de datos LiDAR en ROS 2 y RViz2.
 - Pruebas de teleoperación y validación percepción-actuación.
 - Separación entre alimentación de potencia y alimentación de computación.
+- Archivos STL y SolidWorks incluidos para documentación y fabricación mecánica.
 
 ## Arquitectura del sistema
 
@@ -40,6 +41,7 @@ El robot se estructura en los siguientes subsistemas:
 | Percepción | RPLIDAR C1 e IMU BNO055 |
 | Alimentación | Batería de 12 V y power bank USB-C PD |
 | Software | Debian, Docker, ROS 2 Humble, Python y RViz2 |
+| Diseño mecánico | Piezas CAD, STL y SolidWorks |
 
 ## Demostraciones
 
@@ -86,6 +88,8 @@ Prueba conjunta donde el robot se controla por teleoperación mientras el LiDAR 
 │       └── teleop_test.ino
 ├── ros2/                          # Configuración ROS 2, launch y RViz
 ├── cad/                           # Archivos CAD y piezas imprimibles
+│   ├── stl/                       # Modelos STL preparados para impresión 3D
+│   └── solidworks/                # Archivos editables originales de SolidWorks
 ├── images/                        # Imágenes utilizadas en el README
 ├── videos/                        # Enlaces a vídeos de validación
 ├── .gitignore
@@ -104,6 +108,19 @@ El repositorio incluye los principales scripts utilizados durante la validación
 | `src/teleoperacion/iniciar_teleop.sh` | Script de inicio de la teleoperación desde la Raspberry Pi 5. |
 | `src/teleoperacion/teleop.py` | Programa principal de control por teclado, enviando comandos serie a la OpenRB-150. |
 | `src/openrb_dynamixel/teleop_test.ino` | Código cargado en la OpenRB-150 para controlar los motores DYNAMIXEL XL430. |
+
+## Diseño mecánico
+
+El repositorio también incluye archivos CAD relacionados con el diseño mecánico del robot.
+
+| Carpeta | Descripción |
+|---|---|
+| `cad/stl/` | Archivos STL preparados para laminado e impresión 3D. |
+| `cad/solidworks/` | Archivos originales editables de SolidWorks. |
+
+Las piezas mecánicas incluyen soportes, elementos estructurales, llantas, neumáticos y piezas auxiliares diseñadas para la integración física de los componentes del robot.
+
+Los archivos `.stl` están orientados a la fabricación mediante impresión 3D, mientras que los archivos de SolidWorks permiten editar y adaptar la geometría original de las piezas.
 
 ## Ejecución básica
 
@@ -168,6 +185,43 @@ La conexión utilizada es:
 | SDA | GPIO2 / Pin 3 |
 | SCL | GPIO3 / Pin 5 |
 
+## Conexiones principales
+
+### RPLIDAR C1
+
+| Señal RPLIDAR C1 | Raspberry Pi 5 |
+|---|---|
+| TX | RX GPIO15 / Pin 10 |
+| RX | TX GPIO14 / Pin 8 |
+| GND | GND |
+
+El RPLIDAR C1 se comunica mediante UART, empleando el puerto `/dev/ttyAMA0`.
+
+### IMU BNO055
+
+| Señal IMU BNO055 | Raspberry Pi 5 |
+|---|---|
+| VIN | 3.3 V |
+| GND | GND |
+| SDA | GPIO2 / Pin 3 |
+| SCL | GPIO3 / Pin 5 |
+
+La Raspberry Pi 5 actúa como maestro del bus I2C.
+
+### OpenRB-150 y DYNAMIXEL XL430
+
+| Elemento | Descripción |
+|---|---|
+| Controlador | OpenRB-150 |
+| Motores | DYNAMIXEL XL430 |
+| Bus | DYNAMIXEL TTL |
+| Motor izquierdo | ID `1` |
+| Motor derecho | ID `2` |
+| Baudrate DYNAMIXEL | `57600` |
+| Comunicación Raspberry Pi 5 - OpenRB-150 | USB serie `/dev/ttyACM0` |
+
+La OpenRB-150 actúa como maestro de comunicación del bus DYNAMIXEL TTL y controla los motores conectados físicamente en cadena.
+
 ## Estado del proyecto
 
 El sistema ha sido validado a nivel de integración hardware-software, teleoperación, lectura de IMU y visualización de datos LiDAR en RViz2.
@@ -180,6 +234,7 @@ Actualmente, el robot permite:
 - Lectura de datos de la IMU BNO055 mediante I2C.
 - Visualización del entorno mediante RPLIDAR C1 en RViz2.
 - Separación entre alimentación de potencia y alimentación de computación.
+- Consulta de archivos mecánicos para impresión 3D y edición CAD.
 
 Como líneas futuras se plantea la integración completa de la IMU en ROS 2, la implementación de navegación autónoma, la caracterización experimental de la autonomía y la mejora de la arquitectura software mediante paquetes ROS 2 específicos.
 
@@ -192,7 +247,3 @@ Universidad de Almería
 ## Licencia
 
 Este proyecto se distribuye bajo licencia MIT. Consulte el archivo `LICENSE` para más información.
-
-
-
-
